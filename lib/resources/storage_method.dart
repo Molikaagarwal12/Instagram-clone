@@ -16,7 +16,7 @@ class StorageMethod {
     
     if(isPost) {
       String id=Uuid().v1();
-      ref.child(id);
+      ref=ref.child(id);
     }
 
     UploadTask uploadTask=ref.putData(file);
