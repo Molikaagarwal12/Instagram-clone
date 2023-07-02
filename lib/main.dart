@@ -1,4 +1,3 @@
-
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
@@ -13,9 +12,10 @@ import 'package:instagram_clone/utils/colors.dart';
 import 'package:provider/provider.dart';
 
 Future<void> main() async {
-  await dotenv.load(fileName:"lib\.env");
-  // WidgetsFlutterBinding.ensureInitialized();
-  // await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+  await dotenv.load();
+
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   runApp(const MyApp());
 }
 
@@ -55,12 +55,12 @@ class _MyAppState extends State<MyApp> {
               }
             }
             if (snapshot.connectionState == ConnectionState.waiting) {
-              return Center(
+              return const Center(
                 child: CircularProgressIndicator(color: Colors.white),
               );
             }
 
-            return LoginScreen();
+            return const LoginScreen();
           },
         ),
       ),

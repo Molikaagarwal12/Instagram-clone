@@ -39,10 +39,12 @@ class _LoginScreenState extends State<LoginScreen> {
     );
     if (res == 'success') {
       Navigator.of(context).pushReplacement(
-        MaterialPageRoute(builder: (context) => ResponsiveLayout(
-          webScreenLayout: WebScreenLayout(),
-          mobileScreenLayout: MobileScreenLayout(),
-        )),
+        MaterialPageRoute(
+          builder: (context) => const ResponsiveLayout(
+            webScreenLayout: WebScreenLayout(),
+            mobileScreenLayout: MobileScreenLayout(),
+          ),
+        ),
       );
     } else {
       showSnackBar(res, context);
@@ -51,7 +53,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
   void navigateToSignUp() {
     Navigator.of(context).push(
-      MaterialPageRoute(builder: (context) => SignUpScreen()),
+      MaterialPageRoute(builder: (context) => const SignUpScreen()),
     );
   }
 
@@ -59,6 +61,7 @@ class _LoginScreenState extends State<LoginScreen> {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
+        backgroundColor: Colors.black,
         body: Column(
           children: [
             Expanded(
@@ -118,13 +121,13 @@ class _LoginScreenState extends State<LoginScreen> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Text(
-                        "Don't have an account?",
+                        "Don't have an account? ",
                         style: TextStyle(color: Colors.white, fontSize: 20),
                       ),
                       GestureDetector(
                         onTap: navigateToSignUp,
                         child: Padding(
-                          padding: const EdgeInsets.symmetric(vertical: 8.0),
+                          padding: EdgeInsets.symmetric(vertical: 8.0),
                           child: Text(
                             "Sign up.",
                             style: TextStyle(color: Colors.white, fontSize: 20),

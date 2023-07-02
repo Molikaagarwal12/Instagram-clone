@@ -12,6 +12,7 @@ import 'package:instagram_clone/widgets/text_field_input.dart';
 
 import '../responsive_layout/webSceenLayout.dart';
 import '../utils/pick_image.dart';
+
 class SignUpScreen extends StatefulWidget {
   const SignUpScreen({Key? key}) : super(key: key);
 
@@ -25,11 +26,11 @@ class _SignUpScreenState extends State<SignUpScreen> {
   TextEditingController userController = TextEditingController();
   TextEditingController bioController = TextEditingController();
   Uint8List? _image;
-bool _isLoading=false;
+  bool _isLoading = false;
 
   @override
   void dispose() {
- emailController.dispose();
+    emailController.dispose();
     passwordController.dispose();
     userController.dispose();
     bioController.dispose();
@@ -37,111 +38,125 @@ bool _isLoading=false;
   }
 
   Future<void> selectImage(BuildContext context) async {
-  // Uint8List? imageFromGallery = await pickImage(ImageSource.gallery);
-  // Uint8List? imageFromCamera = await pickImage(ImageSource.camera);
+    // Uint8List? imageFromGallery = await pickImage(ImageSource.gallery);
+    // Uint8List? imageFromCamera = await pickImage(ImageSource.camera);
 
-   showDialog<void>(
-    context: context,
-    builder: (BuildContext context) {
-      return AlertDialog(
-        title: Text('Select Image'),
-        content: SingleChildScrollView(
-          child: ListBody(
-            children: <Widget>[
-              ListTile(
-                leading: Icon(Icons.photo_library),
-                title: Text('Gallery'),
-onTap: () async {
-                  Uint8List? selectedImage = await pickImage(ImageSource.gallery);
-                  setState(() {
-                    _image = selectedImage;
-                  });
-                  Navigator.of(context).pop();
-                },
-              ),
-              ListTile(
-                leading: Icon(Icons.camera_alt),
-                title: Text('Camera'),
-                onTap: () async {
-                  Uint8List? selectedImage = await pickImage(ImageSource.camera);
-                  setState(() {
-                    _image = selectedImage;
-                  });
-                  Navigator.of(context).pop();
-                },
-              ),
-            ],
+    showDialog<void>(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text('Select Image'),
+          content: SingleChildScrollView(
+            child: ListBody(
+              children: <Widget>[
+                ListTile(
+                  leading: const Icon(Icons.photo_library),
+                  title: const Text('Gallery'),
+                  onTap: () async {
+                    Uint8List? selectedImage =
+                        await pickImage(ImageSource.gallery);
+                    setState(() {
+                      _image = selectedImage;
+                    });
+                    if (context.mounted) {
+                      Navigator.of(context).pop();
+                    }
+                  },
+                ),
+                ListTile(
+                  leading: const Icon(Icons.camera_alt),
+                  title: const Text('Camera'),
+                  onTap: () async {
+                    Uint8List? selectedImage =
+                        await pickImage(ImageSource.camera);
+                    setState(() {
+                      _image = selectedImage;
+                    });
+                    if (context.mounted) {
+                      Navigator.of(context).pop();
+                    }
+                  },
+                ),
+              ],
+            ),
           ),
-        ),
-  );
-    },
-  );
-}
+        );
+      },
+    );
+  }
 
-void signUpUser() async{
-  setState(() {
-    _isLoading=true;
-  });
-                  String res=await AuthRepo().signUpUser
-                  (email: emailController.text,
-                  password:passwordController.text, 
-                  userName:userController.text,
-                   bio: bioController.text, 
-                   file: _image!);
+  void signUpUser() async {
+    setState(() {
+      _isLoading = true;
+    });
+    String res = await AuthRepo().signUpUser(
+      email: emailController.text,
+      password: passwordController.text,
+      userName: userController.text,
+      bio: bioController.text,
+      file: _image!,
+    );
 
-                   setState(() {
-                     _isLoading=false;
-                   });
-          if(res!='success'){
-            showSnackBar(res, context);
-          }
- else{
-           Navigator.of(context).pushReplacement(
-              MaterialPageRoute(builder: (context)=> ResponsiveLayout(
-                webScreenLayout: WebScreenLayout(), 
-                mobileScreenLayout: MobileScreenLayout())
-           ));
-          }
-          setState(() {
-            _isLoading=false;
-          });
-}
- void navigateToLogin(){
-  Navigator.of(context).push(
-    MaterialPageRoute(builder: (context)=>LoginScreen()));
- }
-  
+    print({res});
+
+    setState(() {
+      _isLoading = false;
+    });
+
+    if (context.mounted) {
+      if (res != 'success') {
+        showSnackBar(res, context);
+      } else {
+        Navigator.of(context).pushReplacement(
+          MaterialPageRoute(
+            builder: (context) => const ResponsiveLayout(
+              webScreenLayout: WebScreenLayout(),
+              mobileScreenLayout: MobileScreenLayout(),
+            ),
+          ),
+        );
+      }
+      setState(() {
+        _isLoading = false;
+      });
+    }
+  }
+
+  void navigateToLogin() {
+    Navigator.of(context)
+        .push(MaterialPageRoute(builder: (context) => const LoginScreen()));
+  }
+
   @override
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
         body: ListView(
           children: [
-            SizedBox(height: 100),
+            const SizedBox(height: 100),
             Center(
               child: SvgPicture.network(
-  'https://raw.githubusercontent.com/RivaanRanawat/instagram-flutter-clone/57f92e50238913d1a77b082ea8b061cda74865c9/assets/ic_instagram.svg',
+                'https://raw.githubusercontent.com/RivaanRanawat/instagram-flutter-clone/57f92e50238913d1a77b082ea8b061cda74865c9/assets/ic_instagram.svg',
                 color: primaryColor,
                 height: 64,
               ),
             ),
-            SizedBox(height: 20),
+            const SizedBox(height: 20),
             Center(
               child: Stack(
                 children: [
-                  _image!=null?
-                  CircleAvatar(
-                    radius: 64,
-                    backgroundImage: MemoryImage(_image!)
-                  ):CircleAvatar(
-                    radius: 64,
-                    backgroundImage: NetworkImage('https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png')
-                  ),
+                  _image != null
+                      ? CircleAvatar(
+                          radius: 64, backgroundImage: MemoryImage(_image!))
+                      : const CircleAvatar(
+                          radius: 64,
+                          backgroundImage: NetworkImage(
+                              'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png')),
                   Positioned(
                     top: 80,
-left: 80,
+                    left: 80,
                     child: IconButton(
-                      icon: Icon(Icons.add_a_photo_sharp),
+                      icon: const Icon(Icons.add_a_photo_sharp),
                       onPressed: () => selectImage(context),
                       iconSize: 45,
                     ),
@@ -162,7 +177,7 @@ left: 80,
               child: TextFieldInput(
                 textEditingController: emailController,
                 hintText: 'Enter your email',
- type: TextInputType.emailAddress,
+                type: TextInputType.emailAddress,
               ),
             ),
             Padding(
@@ -184,42 +199,43 @@ left: 80,
             ),
             Padding(
               padding: const EdgeInsets.all(12.0),
- child: InkWell(
+              child: InkWell(
                 onTap: signUpUser,
-                child: _isLoading?Center(
-                  child: CircularProgressIndicator(
-                    color: primaryColor,
-                  ),
-                ):
-                Container(
-                  color: Colors.blue,
-                  height: 40,
-                  width: 340,
-                  child: Center(
-                    child: Text('Sign Up', style: TextStyle(color: Colors.white)),
-                  ),
-                ),
+                child: _isLoading
+                    ? const Center(
+                        child: CircularProgressIndicator(
+                          color: primaryColor,
+                        ),
+                      )
+                    : Container(
+                        color: Colors.blue,
+                        height: 40,
+                        width: 340,
+                        child: const Center(
+                          child: Text('Sign Up',
+                              style: TextStyle(color: Colors.white)),
+                        ),
+                      ),
               ),
             ),
-            Flexible(child: Container(), flex: 2),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Container(
-                  child: Text(
+                  padding: const EdgeInsets.symmetric(vertical: 8),
+                  child: const Text(
                     "Already have an account?",
                     style: TextStyle(color: Colors.white, fontSize: 20),
-),
-                  padding: EdgeInsets.symmetric(vertical: 8),
+                  ),
                 ),
                 GestureDetector(
                   onTap: navigateToLogin,
                   child: Container(
-                    child: Text(
+                    padding: const EdgeInsets.symmetric(vertical: 8),
+                    child: const Text(
                       "Login.",
                       style: TextStyle(color: Colors.white, fontSize: 20),
                     ),
-                    padding: EdgeInsets.symmetric(vertical: 8),
                   ),
                 )
               ],

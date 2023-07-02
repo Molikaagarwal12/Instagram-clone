@@ -15,7 +15,7 @@ class StorageMethod {
      
     
     if(isPost) {
-      String id=Uuid().v1();
+      String id=const Uuid().v1();
       ref=ref.child(id);
     }
 
